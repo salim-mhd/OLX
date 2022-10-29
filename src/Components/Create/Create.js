@@ -14,21 +14,26 @@ const Create = () => {
   const [image,setImage] = useState(null)
   const date = new Date()
   const handleSubmit =()=>{
-    firebase.storage().ref(`/image/${image.name}`).put(image).then(({ref})=>{
-      ref.getDownloadURL().then((url)=>{
-        console.log(url);
-        firebase.firestore().collection('product').add({
-          name,
-          category,
-          price,
-          url,
-          userId:user.uid,
-          createdAt:date.toDateString()
+    if(name.length<=4 || category.length<=4 || price=="" || image==""){
+      alert('Require all details')
+    }else{
+      firebase.storage().ref(`/image/${image.name}`).put(image).then(({ref})=>{
+        ref.getDownloadURL().then((url)=>{
+          console.log(url);
+          firebase.firestore().collection('product').add({
+            name,
+            category,
+            price,
+            url,
+            userId:user.uid,
+            createdAt:date.toDateString()
+          })
+        }).then(()=>{
+          history.push('/')
         })
-      }).then(()=>{
-        history.push('/')
       })
-    })
+    }
+
   }
   return (
     <Fragment>

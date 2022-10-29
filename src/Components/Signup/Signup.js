@@ -15,20 +15,27 @@ export default function Signup() {
 
   const handleSubmit=(e)=>{
     e.preventDefault();
-    console.log(username, email, password, phone)
-    console.log(firebase);
-firebase.auth().createUserWithEmailAndPassword(email,password).then((result)=>{
-  result.user.updateProfile({displayName:username}).then(()=>{
-    firebase.firestore().collection('users').add({
-      id:result.user.uid,
-      username:username,
-      phone:phone
-    }).then(()=>{
-      history.push("/login")
-    })
+    if(username.length<=4 || password.length<=6 || phone.length!=10 || email==='') {
+      alert("Require all details")
+    }else{
+      firebase.auth().createUserWithEmailAndPassword(email,password).then((result)=>{
+  
+        result.user.updateProfile({displayName:username}).then(()=>{
+          firebase.firestore().collection('users').add({
+            id:result.user.uid,
+            username:username,
+            phone:phone
+          }).then(()=>{
+            history.push("/login")
+          })
+      
+        })
+      }).catch((error)=> {
+        alert(error.message);
+      })
+    }
+   
 
-  })
-})
   }
 
   return (
@@ -42,7 +49,13 @@ firebase.auth().createUserWithEmailAndPassword(email,password).then((result)=>{
             className="input"
             type="text"
             value={username}
-            onChange={(e)=>setUsername(e.target.value)}
+            onChange={(e)=>{
+              if(e.target.value.length<=4){
+console.log('hiiiiiiiiiiiiiiiiiiii');
+
+              }
+              setUsername(e.target.value)
+            }}
             id="fname"
             name="name"
             defaultValue="John"
@@ -87,7 +100,9 @@ firebase.auth().createUserWithEmailAndPassword(email,password).then((result)=>{
           <br />
           <button>Signup</button>
         </form>
-        <a>Login</a>
+        <a onClick={()=>{
+          history.push('/login')
+        }}>Login</a>
       </div>
     </div>
   );

@@ -14,7 +14,8 @@ const handleLogin = (e)=>{
 firebase.auth().signInWithEmailAndPassword(email,password).then(()=>{
   history.push('/')
 }).catch((error)=>{
-  alert(error.message)
+  console.log("------------------------------------");
+  console.log(error.code);
 })
 }
   return (
@@ -47,7 +48,9 @@ firebase.auth().signInWithEmailAndPassword(email,password).then(()=>{
           <br />
           <button>Login</button>
         </form>
-        <a>Signup</a>
+        <a onClick={()=>{
+          history.push('/signup')
+        }}>Signup</a>
       </div>
     </div>
   );
