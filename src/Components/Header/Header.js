@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 
+import Swal from 'sweetalert2';
 import './Header.css';
 import OlxLogo from '../../assets/OlxLogo';
 import Search from '../../assets/Search';
@@ -44,8 +45,21 @@ function Header() {
           <hr />
         </div>
         {user && <span onClick={()=>{
-          firebase.auth().signOut();
-          history.push('/login')
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be close this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes !',
+            cancelButtonText:'No'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              firebase.auth().signOut();
+              history.push('/login')
+            }
+          })
         }}>Logout</span>}
         <div className="sellMenu">
           <SellButton></SellButton>
